@@ -3,34 +3,39 @@ package com.example.weather_app.webclient;
 import com.example.weather_app.model.Forecast;
 import com.example.weather_app.model.Location;
 import com.example.weather_app.webclient.dto.WeatherbitDataDto;
+import com.example.weather_app.webclient.dto.WeatherbitDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Locale;
 
 @Component
 public class WeatherClient {
 
-    private static final String WEATER_URL = "http://api.weatherbit.io/v2.0/forecast/";
-    private static final String API_KEY = "56c3df3771794dfab56b72bdd23e7772";
+    private static final String WEATHER_URL = "http://api.weatherbit.io/v2.0/forecast/";
+
+    @Value("${API_KEY}")
+    private String API_KEY;
     private RestTemplate restTemplate = new RestTemplate();
 
-    public Forecast getForecast(Location location, double day) {
+    public Forecast getForecast(Location location, long day) {
         double lat= location.getLatitude();
         double lon= location.getLongitude();
-        WeatherbitDataDto weatherbitDataDto = callGetMethod("daily?lat={lat}&lon={lon}&days={day}&key={apiKey}",
-                WeatherbitDataDto.class,
+        WeatherbitDto weatherbitDto = callGetMethod("daily?lat={lat}&lon={lon}&days={day}&key={apiKey}",
+                WeatherbitDto.class,
                 lat, lon, day, API_KEY);
         return Forecast.builder()
-                .temperature(weatherbitDataDto.getTemp())
-                .windSpeed(weatherbitDataDto.getWind_spd())
-                .location(location)
+                .temperature(weatherbitDto.getData().get(0).getTemp())
+                .windSpeed(weatherbitDto.getData().get(0).getWind_spd())
+                .location(Location.valueOf(weatherbitDto.getCity_name().toUpperCase(Locale.ROOT)))
                 .build();
     }
 
-
     private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {
-        return restTemplate.getForObject(WEATER_URL + url,
+        return restTemplate.getForObject(WEATHER_URL + url,
                 responseType, objects);
     }
-
 
 }
