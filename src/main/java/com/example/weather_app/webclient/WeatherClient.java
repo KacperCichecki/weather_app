@@ -2,14 +2,10 @@ package com.example.weather_app.webclient;
 
 import com.example.weather_app.model.Forecast;
 import com.example.weather_app.model.Location;
-import com.example.weather_app.webclient.dto.WeatherbitDataDto;
 import com.example.weather_app.webclient.dto.WeatherbitDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Locale;
 
 @Component
 public class WeatherClient {
@@ -29,7 +25,7 @@ public class WeatherClient {
         return Forecast.builder()
                 .temperature(weatherbitDto.getData().get(0).getTemp())
                 .windSpeed(weatherbitDto.getData().get(0).getWind_spd())
-                .location(Location.valueOf(weatherbitDto.getCity_name().toUpperCase(Locale.ROOT)))
+                .location(location)
                 .build();
     }
 

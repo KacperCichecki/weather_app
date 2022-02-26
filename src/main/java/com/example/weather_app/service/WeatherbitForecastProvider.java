@@ -21,11 +21,8 @@ public class WeatherbitForecastProvider implements ForecastProvider{
     public Optional<Forecast> getForecast(Location location, LocalDate date) {
 
         LocalDate currentDate = LocalDate.now();
-        long requiredDay= DAYS.between(date, currentDate);
-
+        long requiredDay = DAYS.between(date, currentDate) + 1;
         return Optional.ofNullable(weatherClient.getForecast(location, requiredDay));
-
-
 
     }
 }
