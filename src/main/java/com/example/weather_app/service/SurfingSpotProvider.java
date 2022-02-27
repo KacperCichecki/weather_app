@@ -28,9 +28,10 @@ public class SurfingSpotProvider implements SpotProvider {
     }
 
     private void validate(LocalDate date) {
-        // validate the date: nie może być większa niz 16 dni i mniejsza niż data teraźniejsza
-        // wyrzucić wyjątek że zły parametr i zmapować go w handlerze wyjątków na kod 422
-
+        LocalDate dateLimit = LocalDate.now().plusDays(16);
+        if (date.isAfter(dateLimit) || date.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Date cannot after 16 days from today (");
+        }
     }
 
     private Optional<Forecast> getFilteredForecastsBy(LocalDate date) {
@@ -67,24 +68,4 @@ public class SurfingSpotProvider implements SpotProvider {
             return (forecast.getWindSpeed() * 3) + forecast.getTemperature();
         }
     }
-
 }
-/*
-    if wind speed IN range <5; 35> m/s \
-                                         Location OK -> add to forecastList
-    if temperature IN range <5; 35>m/s /
-
-
-
-         sprawdzić pogodę dla wszyskich lokalizacji, dodać je do listy i wybrać z niej najlepszą wg wytycznych:
-
-    The best location selection criteria are:
-    If the wind speed is not within <5; 18> (m/s) and the temperature is not in the range <5; 35> (°C),
-    the location is not suitable for windsurfing. However, if they are in these ranges,
-
-    then the best location is determined by the highest value calculated from the following formula:
-    v * 3 + temp
-    where v is the wind speed in m/s on a given day, and temp is an average forecasted temperature for a given day in Celsius,
-    respectively - you can obtain these parameters from the “data” key in Weatherbit API’s response.
-    If none of the locations meets the above criteria, the application does not return any.
-        */
