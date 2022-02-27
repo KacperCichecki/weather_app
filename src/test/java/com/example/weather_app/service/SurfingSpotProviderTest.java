@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static com.example.weather_app.model.Location.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,11 +39,10 @@ class SurfingSpotProviderTest {
     @MethodSource("provideLocationsWithNoGoodWeatherConditions")
     void findBestSpot_noneWeatherConditionInRightRange_returnsEmptyOptional(List<Forecast> forecastList) {
         //given
-        LocalDate date = LocalDate.now().plusDays(1);
-        forecastList.forEach(forecast -> when(forecastProvider.getForecast(eq(forecast.getLocation()), eq(date)))
+        forecastList.forEach(forecast -> when(forecastProvider.getForecast(eq(forecast.getLocation()), any(LocalDate.class)))
                 .thenReturn(Optional.of(forecast)));
         //when
-        Optional<SurfingSpot> bestSpot = surfingSpotProvider.findBestSpot(date);
+        Optional<SurfingSpot> bestSpot = surfingSpotProvider.findBestSpot(LocalDate.now());
         //then
         assertTrue(bestSpot.isEmpty());
     }
@@ -118,8 +118,8 @@ class SurfingSpotProviderTest {
     void findBestSpot_dateOutOfRange_throwsIllegalArgumentException(int day) {
         //given
         LocalDate date = LocalDate.now().plusDays(day);
-        Forecast forecast = new Forecast(BRIDGETOWN, 6F, 23F);
         //when then
         assertThrows(IllegalArgumentException.class, () -> surfingSpotProvider.findBestSpot(date));
     }
+
 }
