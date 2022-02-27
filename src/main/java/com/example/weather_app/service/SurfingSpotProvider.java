@@ -3,6 +3,7 @@ package com.example.weather_app.service;
 import com.example.weather_app.model.Forecast;
 import com.example.weather_app.model.Location;
 import com.example.weather_app.model.SurfingSpot;
+import com.example.weather_app.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,13 @@ public class SurfingSpotProvider implements SpotProvider {
     }
 
     private void validate(LocalDate date) {
-        LocalDate dateLimit = LocalDate.now().plusDays(16);
-        if (date.isAfter(dateLimit) || date.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Date cannot after 16 days from today (");
+        long period = DateUtils.dateDifferenceFromNowInDays(date);
+        if (period < 0) {
+
+        } else if (period > 16) {
+
         }
+
     }
 
     private Optional<Forecast> getFilteredForecastsBy(LocalDate date) {
@@ -68,4 +72,5 @@ public class SurfingSpotProvider implements SpotProvider {
             return (forecast.getWindSpeed() * 3) + forecast.getTemperature();
         }
     }
+
 }
