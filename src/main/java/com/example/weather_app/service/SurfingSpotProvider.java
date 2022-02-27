@@ -1,5 +1,6 @@
 package com.example.weather_app.service;
 
+import com.example.weather_app.exception.ResourceNotFoundException;
 import com.example.weather_app.model.Forecast;
 import com.example.weather_app.model.Location;
 import com.example.weather_app.model.SurfingSpot;
@@ -28,6 +29,10 @@ public class SurfingSpotProvider implements SpotProvider {
     }
 
     private void validate(LocalDate date) {
+        LocalDate dateLimit = LocalDate.now().plusDays(16);
+        if (date.isAfter(dateLimit) || date.isBefore(LocalDate.now())){
+            throw new IllegalArgumentException("Date cannot after 16 days from today (");
+        }
         // validate the date: nie może być większa niz 16 dni i mniejsza niż data teraźniejsza
         // wyrzucić wyjątek że zły parametr i zmapować go w handlerze wyjątków na kod 422
 
