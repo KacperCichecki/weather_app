@@ -45,7 +45,6 @@ public class WeatherbitForecastProvider implements ForecastProvider {
                 .temperature(weatherbitDto.getData().get((int) day).getTemp())
                 .windSpeed(weatherbitDto.getData().get((int) day).getWind_spd())
                 .location(location)
-                .date(weatherbitDto.getData().get((int) day).getValid_date())
                 .build();
     }
 

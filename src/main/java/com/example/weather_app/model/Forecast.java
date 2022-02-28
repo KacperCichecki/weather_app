@@ -12,6 +12,5 @@ public class Forecast {
     private Location location;
     private double windSpeed;
     private double temperature;
-    private String date;
 
 }

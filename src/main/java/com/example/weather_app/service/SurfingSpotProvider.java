@@ -27,7 +27,7 @@ public class SurfingSpotProvider implements SpotProvider {
 
         return getFilteredForecastsBy(date)
                 .map(bestForecast -> new SurfingSpot(bestForecast.getLocation(),
-                        bestForecast.getTemperature(), bestForecast.getWindSpeed(), bestForecast.getDate()));
+                        bestForecast.getTemperature(), bestForecast.getWindSpeed()));
     }
 
     private void validate(LocalDate date) {

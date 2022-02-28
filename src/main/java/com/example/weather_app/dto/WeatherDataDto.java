@@ -7,6 +7,5 @@ public class WeatherDataDto {
 
     private float wind_spd;
     private float temp;
-    private String valid_date;
 
 }
