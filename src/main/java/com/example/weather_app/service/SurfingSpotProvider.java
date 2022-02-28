@@ -1,5 +1,6 @@
 package com.example.weather_app.service;
 
+import com.example.weather_app.exception.ResourceNotFoundException;
 import com.example.weather_app.model.Forecast;
 import com.example.weather_app.model.Location;
 import com.example.weather_app.model.SurfingSpot;
@@ -30,12 +31,9 @@ public class SurfingSpotProvider implements SpotProvider {
 
     private void validate(LocalDate date) {
         long period = DateUtils.dateDifferenceFromNowInDays(date);
-        if (period < 0) {
-
-        } else if (period > 16) {
-
+        if (period < 0 || period > 16) {
+            throw new ResourceNotFoundException("Date cannot after 16 days from today (" + date + ")");
         }
-
     }
 
     private Optional<Forecast> getFilteredForecastsBy(LocalDate date) {
