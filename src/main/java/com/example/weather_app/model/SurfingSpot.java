@@ -11,4 +11,5 @@ public class SurfingSpot {
     private final Location location;
     private final double temperature;
     private final double windSpeed;
+    private final String date;
 }

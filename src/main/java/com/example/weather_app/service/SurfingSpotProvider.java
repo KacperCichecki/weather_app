@@ -5,6 +5,7 @@ import com.example.weather_app.model.Location;
 import com.example.weather_app.model.SurfingSpot;
 import com.example.weather_app.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,13 +20,14 @@ public class SurfingSpotProvider implements SpotProvider {
     private final ForecastProvider forecastProvider;
 
     @Override
+    @Cacheable(cacheNames = "surfingSpot", key = "#date")
     public Optional<SurfingSpot> findBestSpot(LocalDate date) {
 
         validate(date);
 
         return getFilteredForecastsBy(date)
                 .map(bestForecast -> new SurfingSpot(bestForecast.getLocation(),
-                        bestForecast.getTemperature(), bestForecast.getWindSpeed()));
+                        bestForecast.getTemperature(), bestForecast.getWindSpeed(), bestForecast.getDate()));
     }
 
     private void validate(LocalDate date) {
